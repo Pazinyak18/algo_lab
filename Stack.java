@@ -1,73 +1,9 @@
-public class Stack  {
-    private int arr[];
-    private int top;
-    private int capacity;
- 
-    Stack(int size) {
-        arr = new int[size];
-        capacity = size;
-        top = -1;
-    }
- 
-    public void push(int x) {
-        if (isFull()) {
-            System.out.println("Overflow\nProgram Terminated\n");
-            System.exit(1);
-        }
-        arr[++top] = x;
-    }
- 
-    public int pop() {
-        if (isEmpty()) {
-            System.out.println("Underflow\nProgram Terminated");
-            System.exit(1);
-        }
-        return arr[top--];
-    }
-    
-    public void print() {
-        for(int i = 0; i <= top; i++)
-            System.out.print(arr[i] + " ");
-        System.out.println();
-    }
- 
-    public int peek() {
-        if (!isEmpty())
-            return arr[top];
-        else
-            System.exit(1);
- 
-        return -1;
-    }
- 
-    public int size() {
-        return top + 1;
-    }
- 
-    public Boolean isEmpty() {
-        return top == -1;
-    }
- 
-    public Boolean isFull() {
-        return top == capacity - 1;
-    }
-    
-    public int elem(int elem) {
-        return arr[elem];
-    }
+public class Stack {
+    private int size;
+    private Node top = null;
 
-    public void search(int elem) {
-        for(int i = 0; i <= top; i++) {
-            if(elem == arr[i]) {
-                System.out.println("Element " + elem + " found");
-                return;
-            }
-        }
-        System.out.println("Element " + elem + " not found");
-    }
-    public static void main(String []args) {
-        Stack stack = new Stack(5);
-
+    public static void main(String[] args) {
+        Stack stack = new Stack();
 
         stack.push(1);
         stack.push(2);
@@ -79,8 +15,90 @@ public class Stack  {
         stack.pop();
         stack.print();
 
-        System.out.println("\nElement with index " + 0 + ": " + stack.elem(0));
-        stack.search(3);
-        stack.search(6);
+        System.out.println(stack.getElem(2));
+    }
+
+    public void push(int x) {
+        Node nodeToPut = new Node(x);
+        nodeToPut.pointer = top;
+        top = nodeToPut;
+        size++;
+    }
+
+    public int pop() {
+        if (isEmpty()) {
+            return -1;
+        }
+        Node temp = top;
+        top = top.pointer;
+        return temp.value;
+    }
+
+    public void print() {
+        if (isEmpty()) {
+            System.out.println("No elem to print");
+            return;
+        }
+        Node iterator = top;
+        while (iterator != null) {
+            System.out.println("[" + iterator.getValue() + "]");
+            iterator = iterator.pointer;
+        }
+        System.out.println();
+    }
+
+    public int peek() {
+        if (isEmpty()) {
+            return -1;
+        }
+        return top.value;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public Boolean isEmpty() {
+        return top == null;
+    }
+
+    public int getElem(int valueToSearch) {
+        if (isEmpty()) {
+            System.out.println("No elem to search");
+            return -1;
+        }
+        Node iterator = top;
+        while (iterator.pointer != null) {
+            if (iterator.value == valueToSearch) {
+                return iterator.value;
+            }
+            iterator = iterator.pointer;
+        }
+        return -1;
+    }
+
+    class Node {
+        private Node pointer = null;
+        private int value;
+
+        Node(int val) {
+            value = val;
+        }
+
+        public Node getPointer() {
+            return pointer;
+        }
+
+        public void setPointer(Node pointer) {
+            this.pointer = pointer;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public void setValue(int value) {
+            this.value = value;
+        }
     }
 }
