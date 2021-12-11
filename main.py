@@ -1,29 +1,38 @@
-def find3Numbers(Array, arr_size, sum):
+def binary_search(arr, key, left, right):
+    while left < right:
+        center = (left + right) // 2
 
-    Array.sort()
+        if arr[center] == key:
+            return center
+        elif arr[center] < key:
+            left = center + 1
+        elif arr[center] > key:
+            right = center - 1
 
-    for i in range(0, arr_size - 2):
+    return left
 
-        left = i + 1
 
-        right = arr_size - 1
-        while left < right:
+def get_num(arr, sum):
+    arr.sort()
+    left = 0
+    right = len(arr) - 1
 
-            if Array[i] + Array[left] + Array[right] == sum:
-                print("Triplet is", Array[i],
-                      ', ', Array[left], ', ', Array[right])
-                return True
-
-            elif Array[i] + Array[left] + Array[right] < sum:
-                left += 1
-            else:
-                right -= 1
+    while left < right:
+        i = binary_search(arr, sum - arr[left] - arr[right], left + 1, right)
+        curr_sum = arr[left] + arr[i] + arr[right]
+        if curr_sum == sum and left != i:
+            print("Yes", arr[left], arr[i], arr[right])
+            return True
+        elif curr_sum < sum:
+            left += 1
+        elif curr_sum > sum:
+            right -= 1
+    print("No")
 
     return False
 
 
-Array = list(range(1, 1000))
-sum = 2500
-arr_size = len(Array)
-
-find3Numbers(Array, arr_size, sum)
+if __name__ == '__main__':
+    arr = [5, 6, 7, 8, 9, 6, 9, 3, 6, 24, 76, 34, 75, 24, 7, 66, 778, 2, 8, 3]
+    search_sum = 75
+    get_num(arr, search_sum)
