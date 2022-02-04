@@ -1,27 +1,41 @@
-def prefix(string):
-    v = [0]*len(string)
-    for i in range(1, len(string)):
-        k = v[i-1]
-        while k > 0 and string[k] != string[i]:
-            k = v[k-1]
-        if string[k] == string[i]:
-            k = k + 1
-        v[i] = k
-    return v
+def func_prefix(s: str) -> list:
 
+    l = len(s)
+    P = [0]*l
+    i, j = 0, 1
+    while j < l :
+        if s[i] == s[j]:
+            P[j] = i + 1
+            i += 1
+            j += 1
 
-def kmp(string, word):
-    index = -1
-    prefix_array = prefix(string)
-    equal_chars = 0
-    for i in range(len(word)):
-        while equal_chars > 0 and string[equal_chars] != word[i]:
-            equal_chars = prefix_array[equal_chars-1]
-            continue
-        if string[equal_chars] == word[i]:
-            equal_chars = equal_chars + 1
-        if equal_chars == len(string):
-            index = i - len(string) + 1
-            break
-    return index
+        elif i:
+            i = P[i - 1]
+        else:
+            P[j] = 0
+            j += 1
+    return P
 
+def kmp(text: str, sub: str) -> list:
+    sub_len = len(sub)
+    text_len = len(text)
+    print(text_len, sub_len)
+    if not text_len or sub_len > text_len:
+        return []
+    P = func_prefix(sub)
+    entries = []
+    i = j = 0
+    while i < text_len and j < sub_len:
+        if text[i] == sub[j]:
+            if j == sub_len - 1:
+                entries.append(i - sub_len + 1)
+                j = 0
+            else:
+                j += 1
+            i += 1
+
+        elif j:
+            j = P[j-1]
+        else:
+            i += 1
+    return entries
